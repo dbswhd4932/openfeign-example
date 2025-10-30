@@ -1,6 +1,7 @@
 package com.example.board.controller;
 
-import com.example.board.dto.CommentDto.*;
+import com.example.board.dto.CommentDto;
+import com.example.board.dto.CommentDto.CommentResponse;
 import com.example.board.service.CommentService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -37,7 +38,7 @@ public class CommentController {
     @PostMapping
     public ResponseEntity<CommentResponse> createComment(
             @PathVariable Long postId,
-            @Valid @RequestBody CreateCommentRequest request
+            @Valid @RequestBody CommentDto.CreateCommentRequest request
     ) {
         CommentResponse response = commentService.createComment(postId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -52,7 +53,7 @@ public class CommentController {
     public ResponseEntity<CommentResponse> updateComment(
             @PathVariable Long postId,
             @PathVariable Long commentId,
-            @Valid @RequestBody UpdateCommentRequest request
+            @Valid @RequestBody CommentDto.UpdateCommentRequest request
     ) {
         CommentResponse response = commentService.updateComment(commentId, request);
         return ResponseEntity.ok(response);
