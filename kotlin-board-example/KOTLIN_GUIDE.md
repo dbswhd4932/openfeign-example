@@ -3,11 +3,18 @@
 ## 목차
 1. [기본 문법](#1-기본-문법)
 2. [Null Safety](#2-null-safety)
+   - [Nullable 타입 (`?`)](#221--nullable-타입-선언)
+   - [Safe Call 연산자 (`?.`)](#222--safe-call-연산자)
+   - [Elvis 연산자 (`?:`)](#223--elvis-연산자-엘비스-연산자)
+   - [Non-null Assertion (`!!`)](#224--non-null-assertion-operator-강제-언래핑)
 3. [클래스와 객체](#3-클래스와-객체)
 4. [함수형 프로그래밍](#4-함수형-프로그래밍)
+   - [람다 표현식](#41-람다-표현식-lambda-expressions)
+   - [암시적 파라미터 (`it`)](#412-it---암시적-파라미터)
 5. [스코프 함수](#5-스코프-함수)
 6. [확장 함수](#6-확장-함수)
-7. [Spring Boot와 함께 사용하기](#7-spring-boot와-함께-사용하기)
+7. [어노테이션 Use-Site Targets (`@field`)](#7-어노테이션-use-site-targets)
+8. [Spring Boot와 함께 사용하기](#8-spring-boot와-함께-사용하기)
 
 ---
 
@@ -133,17 +140,161 @@ name.length();       // NullPointerException!
 val name: String = null   // 컴파일 에러!
 val name: String? = null  // OK
 
-// Safe Call
+// Safe Call (?)
 val length = name?.length  // null이면 null 반환
 
-// Elvis 연산자
+// Elvis 연산자 (?:)
 val length = name?.length ?: 0  // null이면 0 반환
 
-// Non-null assertion (주의!)
+// Non-null assertion (!!)
 val length = name!!.length  // null이면 NPE 발생
 ```
 
-### 2.2 실전 예제
+### 2.2 Null Safety 연산자 상세 설명
+
+#### 2.2.1 `?` - Nullable 타입 선언
+
+```kotlin
+// Non-nullable (기본)
+val name: String = "John"     // null 할당 불가
+name = null                   // 컴파일 에러!
+
+// Nullable
+val name: String? = "John"    // null 할당 가능
+name = null                   // OK
+```
+
+**핵심:**
+- 타입 뒤에 `?`를 붙이면 nullable 타입
+- nullable 타입은 null을 허용하지만, 직접 메서드 호출 불가
+
+```kotlin
+val name: String? = "John"
+name.length        // 컴파일 에러! (null일 수 있어서)
+name?.length       // OK (Safe Call 사용)
+```
+
+#### 2.2.2 `?.` - Safe Call 연산자
+
+```kotlin
+val name: String? = null
+
+// Java 방식
+if (name != null) {
+    println(name.length)
+}
+
+// Kotlin Safe Call
+println(name?.length)  // null이면 전체가 null
+```
+
+**동작 방식:**
+- 객체가 null이 아니면 → 메서드/프로퍼티 실행
+- 객체가 null이면 → null 반환 (NPE 발생 안함)
+
+**체이닝:**
+```kotlin
+val city = user?.address?.city  // 중간에 null이면 전체가 null
+```
+
+#### 2.2.3 `?:` - Elvis 연산자 (엘비스 연산자)
+
+```kotlin
+val name: String? = null
+
+// Java 방식
+String result = (name != null) ? name : "Guest";
+
+// Kotlin Elvis 연산자
+val result = name ?: "Guest"  // name이 null이면 "Guest" 반환
+```
+
+**사용 예시:**
+
+```kotlin
+// 기본값 설정
+val length = name?.length ?: 0
+
+// 예외 던지기
+val post = repository.findById(id)
+    ?: throw IllegalArgumentException("게시글을 찾을 수 없습니다")
+
+// early return
+fun processUser(user: User?) {
+    val validUser = user ?: return
+    // validUser는 여기서 non-null
+}
+```
+
+**이름의 유래:**
+```kotlin
+?: 를 90도 돌리면 엘비스의 헤어스타일처럼 보임!
+```
+
+#### 2.2.4 `!!` - Non-null Assertion Operator (강제 언래핑)
+
+```kotlin
+val name: String? = "John"
+val length: Int = name!!.length  // "나는 이게 null이 아니라고 확신해!"
+```
+
+**동작 방식:**
+- nullable 타입을 강제로 non-nullable로 변환
+- 만약 null이면 → `NullPointerException` 발생
+
+**예시:**
+
+```kotlin
+// JPA 엔티티 예시
+@Entity
+data class Post(
+    @Id @GeneratedValue
+    var id: Long? = null  // 저장 전엔 null
+)
+
+// DB에서 조회한 후
+val post = postRepository.findById(1L).orElseThrow()
+val postId: Long = post.id!!  // DB에서 가져왔으니 무조건 id가 있음
+```
+
+**⚠️ 주의사항:**
+
+```kotlin
+// ❌ 나쁜 예: !!를 남발하면 NPE 위험
+val result = user!!.address!!.city!!.name!!
+
+// ✅ 좋은 예: Safe Call과 Elvis 연산자 사용
+val result = user?.address?.city?.name ?: "Unknown"
+```
+
+**언제 사용해야 하나?**
+1. JPA 엔티티의 ID처럼 DB에서 가져온 값 (100% null이 아님을 확신)
+2. 테스트 코드
+3. 플랫폼 타입과 상호작용 시
+
+**언제 피해야 하나?**
+- 대부분의 경우! `!!`는 "code smell"로 간주됨
+- Safe Call(`?.`)이나 Elvis(`?:`) 연산자로 대체 가능하면 대체
+
+#### 2.2.5 연산자 조합 사용
+
+```kotlin
+// Safe Call + Elvis
+val length = name?.length ?: 0
+
+// Safe Call + let + Elvis
+val result = repository.findById(id)
+    ?.let { PostResponse.from(it) }
+    ?: throw IllegalArgumentException("Not found")
+
+// Safe Call 체이닝 + Elvis
+val cityName = user?.address?.city?.name ?: "Unknown"
+
+// 조건부 실행
+post?.comments?.forEach { println(it.content) }
+```
+
+### 2.3 실전 예제
 
 **Java:**
 ```java
@@ -290,7 +441,125 @@ class Dog : Animal() {
 
 ## 4. 함수형 프로그래밍
 
-### 4.1 컬렉션 변환
+### 4.1 람다 표현식 (Lambda Expressions)
+
+람다는 익명 함수를 간결하게 표현하는 방법입니다.
+
+#### 4.1.1 기본 문법
+
+**Java:**
+```java
+// 익명 클래스
+button.setOnClickListener(new OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        System.out.println("Clicked");
+    }
+});
+
+// Java 8+ 람다
+button.setOnClickListener(v -> System.out.println("Clicked"));
+
+// 메서드 레퍼런스
+list.stream().map(String::toUpperCase);
+```
+
+**Kotlin:**
+```kotlin
+// 람다 표현식
+val sum = { x: Int, y: Int -> x + y }
+println(sum(1, 2))  // 3
+
+// 타입 추론
+val sum: (Int, Int) -> Int = { x, y -> x + y }
+
+// 단일 파라미터는 it으로 접근 가능
+val double = { it: Int -> it * 2 }
+val double: (Int) -> Int = { it * 2 }
+
+// 파라미터 없는 람다
+val greet = { println("Hello") }
+greet()
+```
+
+#### 4.1.2 `it` - 암시적 파라미터
+
+람다의 파라미터가 하나일 때, `it`으로 자동 참조 가능:
+
+```kotlin
+// 명시적 파라미터
+listOf(1, 2, 3).map { number -> number * 2 }
+
+// it 사용 (더 간결)
+listOf(1, 2, 3).map { it * 2 }
+
+// 복잡한 경우는 명시적 이름 사용 권장
+posts.filter { post -> post.author == "John" }  // 가독성 좋음
+posts.filter { it.author == "John" }             // 짧지만 it이 뭔지 불명확할 수 있음
+```
+
+#### 4.1.3 후행 람다 (Trailing Lambda)
+
+마지막 파라미터가 람다면 괄호 밖으로 뺄 수 있음:
+
+```kotlin
+// 일반 형태
+repeat(3, { println("Hello") })
+
+// 후행 람다
+repeat(3) { println("Hello") }
+
+// 람다가 유일한 파라미터면 괄호 생략
+list.forEach({ println(it) })
+list.forEach { println(it) }
+```
+
+#### 4.1.4 람다에서 return
+
+```kotlin
+// 로컬 return (람다만 종료)
+fun processItems(items: List<Int>) {
+    items.forEach {
+        if (it == 0) return@forEach  // 이 반복만 스킵
+        println(it)
+    }
+    println("Done")  // 실행됨
+}
+
+// non-local return (함수 전체 종료)
+fun processItems(items: List<Int>) {
+    items.forEach {
+        if (it == 0) return  // 함수 전체 종료!
+        println(it)
+    }
+    println("Done")  // 실행 안됨
+}
+```
+
+#### 4.1.5 고차 함수 (Higher-Order Functions)
+
+함수를 파라미터로 받거나 반환하는 함수:
+
+```kotlin
+// 함수를 파라미터로 받음
+fun calculate(x: Int, y: Int, operation: (Int, Int) -> Int): Int {
+    return operation(x, y)
+}
+
+// 사용
+val sum = calculate(5, 3) { a, b -> a + b }        // 8
+val product = calculate(5, 3) { a, b -> a * b }    // 15
+
+// 함수를 반환
+fun makeMultiplier(factor: Int): (Int) -> Int {
+    return { number -> number * factor }
+}
+
+val double = makeMultiplier(2)
+println(double(5))  // 10
+```
+
+### 4.2 컬렉션 변환
 
 **Java:**
 ```java
@@ -321,7 +590,7 @@ val filtered = posts
 // it: 람다의 단일 파라미터 (implicit parameter)
 ```
 
-### 4.2 주요 컬렉션 함수
+### 4.3 주요 컬렉션 함수
 
 ```kotlin
 val numbers = listOf(1, 2, 3, 4, 5)
@@ -458,9 +727,126 @@ postRepository.findByIdOrNull(id)
 
 ---
 
-## 7. Spring Boot와 함께 사용하기
+## 7. 어노테이션 Use-Site Targets
 
-### 7.1 필수 플러그인
+Kotlin에서 Java 어노테이션을 사용할 때, 어노테이션이 적용될 정확한 위치를 지정해야 할 때가 있습니다.
+
+### 7.1 `@field` - 필드에 어노테이션 적용
+
+**문제 상황:**
+
+```kotlin
+data class User(
+    @NotNull  // 이게 어디에 적용되나요?
+    val name: String
+)
+```
+
+Kotlin의 프로퍼티는 Java에서:
+- 필드 (field)
+- Getter 메서드
+- 생성자 파라미터
+
+총 3곳으로 변환됩니다.
+
+**해결: Use-Site Target 지정**
+
+```kotlin
+data class CommentRequest(
+    // Validation 어노테이션을 필드에 적용
+    @field:NotBlank(message = "내용은 필수입니다")
+    val content: String,
+
+    // JPA 어노테이션
+    @field:Column(nullable = false)
+    val author: String
+)
+```
+
+### 7.2 Use-Site Targets 종류
+
+```kotlin
+class Example {
+    @field:Anno      // Java field에 적용
+    @get:Anno        // getter에 적용
+    @set:Anno        // setter에 적용
+    @param:Anno      // 생성자 파라미터에 적용
+    @property:Anno   // Kotlin 프로퍼티 자체에 적용
+    val name: String
+}
+```
+
+**실제 예시:**
+
+```kotlin
+@Entity
+data class Post(
+    @field:Id
+    @field:GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long? = null,
+
+    @field:Column(nullable = false, length = 200)
+    @field:NotBlank(message = "제목은 필수입니다")
+    var title: String,
+
+    @field:OneToMany(mappedBy = "post", cascade = [CascadeType.ALL])
+    val comments: MutableList<Comment> = mutableListOf()
+)
+```
+
+**왜 필요한가?**
+
+```kotlin
+// ❌ @field 없이
+@NotBlank
+val title: String
+// → Kotlin 컴파일러가 어디에 적용할지 모름
+
+// ✅ @field와 함께
+@field:NotBlank
+val title: String
+// → 명확하게 Java field에 적용
+```
+
+### 7.3 일반적인 사용 패턴
+
+```kotlin
+// JPA Entity
+@Entity
+data class User(
+    @field:Id
+    val id: Long,
+
+    @field:Column(unique = true)
+    @field:Email
+    val email: String
+)
+
+// DTO with Validation
+data class CreatePostRequest(
+    @field:NotBlank(message = "제목은 필수입니다")
+    @field:Size(min = 1, max = 200, message = "제목은 1-200자여야 합니다")
+    val title: String,
+
+    @field:NotBlank(message = "내용은 필수입니다")
+    val content: String
+)
+
+// Jackson JSON 직렬화
+data class ApiResponse(
+    @field:JsonProperty("user_name")
+    val userName: String,
+
+    @field:JsonIgnore
+    val internalId: Long
+)
+```
+
+---
+
+## 8. Spring Boot와 함께 사용하기
+
+### 8.1 필수 플러그인
 
 ```kotlin
 plugins {
@@ -474,7 +860,7 @@ plugins {
 - Spring AOP와 JPA는 프록시 생성을 위해 상속 필요
 - 이 플러그인들이 자동으로 open class로 변환
 
-### 7.2 JPA Entity 작성 팁
+### 8.2 JPA Entity 작성 팁
 
 ```kotlin
 @Entity
@@ -499,7 +885,7 @@ data class Post(
 }
 ```
 
-### 7.3 Repository
+### 8.3 Repository
 
 ```kotlin
 interface PostRepository : JpaRepository<Post, Long> {
@@ -511,7 +897,7 @@ interface PostRepository : JpaRepository<Post, Long> {
 }
 ```
 
-### 7.4 Service
+### 8.4 Service
 
 ```kotlin
 @Service
@@ -535,7 +921,7 @@ class PostService(
 }
 ```
 
-### 7.5 Controller
+### 8.5 Controller
 
 ```kotlin
 @RestController
