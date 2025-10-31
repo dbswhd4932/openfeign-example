@@ -2,7 +2,6 @@ package com.example.board.service
 
 import com.example.board.dto.PostDtoKt
 import com.example.board.repository.PostRepositoryKt
-import org.hibernate.sql.Update
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -74,9 +73,10 @@ class PostServiceKt(
     // 게시글 삭제
     @Transactional
     fun deletePost(id: Long) {
-        val exist = postRepositoryKt.existsById(id)
-        if (!exist) {
-            throw IllegalArgumentException()
+        if (!postRepositoryKt.existsById(id)) {
+            throw IllegalArgumentException("게시글을 찾을 수 없습니다. id: $id")
         }
+
+        postRepositoryKt.deleteById(id)
     }
 }

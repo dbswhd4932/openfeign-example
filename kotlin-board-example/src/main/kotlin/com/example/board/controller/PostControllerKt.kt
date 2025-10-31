@@ -5,6 +5,7 @@ import com.example.board.service.PostServiceKt
 import jakarta.validation.Valid
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -58,7 +59,7 @@ class PostControllerKt(
     @PostMapping
     fun createPost(@Valid @RequestBody request: PostDtoKt.CreatePostRequest): ResponseEntity<PostDtoKt.PostResponse> {
         val response = postServiceKt.createPost(request)
-        return ResponseEntity.ok(response)
+        return ResponseEntity.status(HttpStatus.CREATED).body(response)
     }
 
     // 게시글 수정
