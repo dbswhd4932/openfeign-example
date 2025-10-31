@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="69cb59d6-847b-426e-8190-11aea1b0f9c9" name="변경" comment="13 , 14">
+      <change beforePath="$PROJECT_DIR$/../java-adv1" beforeDir="false" afterPath="$PROJECT_DIR$/../java-adv1" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+        <option value="Kotlin Data Class" />
+        <option value="Kotlin Object" />
+        <option value="Kotlin File" />
+        <option value="Kotlin Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;dbswhd4932&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/dbswhd4932/java-adv1.git&quot;,
+    &quot;accountId&quot;: &quot;0706e0d0-b5a2-4483-86b1-2a63e3debbac&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="2tTY5WuBqPGhu2aqvWtFJmXaGSs" />
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Gradle.kotlin-playground 빌드.executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.AuthenticateKt.executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.ConditionsKt.executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.CourseKt.executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.EmployeeKt.executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.FunctionsKt.executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.HelloKotlinKt.executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.InheritanceKt.executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.InterfaceKt.executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.ItemKt.executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.LabelsAndReturnKt.executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.LongestCommonPrefixAnswerKt.executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.LoopsAndRangeKt.executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.PersonKt.executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.RomanToIntegerAnswerKt.executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.RomanToIntegerKt.executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.TopLevelKt.executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.ValidParenthesesAnswerKt.executor&quot;: &quot;Debug&quot;,
+    &quot;Kotlin.ValidParenthesesKt.executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.VariablesKt.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/r00416/Desktop/riman/study/kotlin-playground/src/main/kotlin/leetcode&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;kotlin-gradle-user-dirs&quot;: [
+      &quot;/Users/r00416/.gradle&quot;
+    ]
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/kotlin/leetcode" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Kotlin.ValidParenthesesAnswerKt">
+    <configuration name="LongestCommonPrefixAnswerKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.example.leetcode.LongestCommonPrefixAnswerKt" />
+      <module name="kotlin-playground.main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RomanToIntegerAnswerKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.example.leetcode.RomanToIntegerAnswerKt" />
+      <module name="kotlin-playground.main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RomanToIntegerKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.example.leetcode.RomanToIntegerKt" />
+      <module name="kotlin-playground.main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ValidParenthesesAnswerKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.example.leetcode.ValidParenthesesAnswerKt" />
+      <module name="kotlin-playground.main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ValidParenthesesKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.example.leetcode.ValidParenthesesKt" />
+      <module name="kotlin-playground.main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Kotlin.ValidParenthesesAnswerKt" />
+        <item itemvalue="Kotlin.ValidParenthesesKt" />
+        <item itemvalue="Kotlin.LongestCommonPrefixAnswerKt" />
+        <item itemvalue="Kotlin.RomanToIntegerAnswerKt" />
+        <item itemvalue="Kotlin.RomanToIntegerKt" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18034.62" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18034.62" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="애플리케이션 수준" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="디폴트 작업">
+      <changelist id="69cb59d6-847b-426e-8190-11aea1b0f9c9" name="변경" comment="" />
+      <created>1740377350135</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1740377350135</updated>
+      <workItem from="1740377351086" duration="21588000" />
+      <workItem from="1740543965182" duration="3160000" />
+      <workItem from="1741829926153" duration="16474000" />
+      <workItem from="1742169881571" duration="598000" />
+    </task>
+    <task id="LOCAL-00001" summary="init">
+      <option name="closed" value="true" />
+      <created>1741843167173</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1741843167173</updated>
+    </task>
+    <task id="LOCAL-00002" summary="13 , 14">
+      <option name="closed" value="true" />
+      <created>1741912709338</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1741912709338</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="init" />
+    <MESSAGE value="13 , 14" />
+    <option name="LAST_COMMIT_MESSAGE" value="13 , 14" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/src/main/kotlin/leetcode/ValidParenthesesAnswer.kt</url>
+          <line>14</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/src/main/kotlin/leetcode/ValidParenthesesAnswer.kt</url>
+          <line>16</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/src/main/kotlin/leetcode/ValidParenthesesAnswer.kt</url>
+          <line>20</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/src/main/kotlin/leetcode/ValidParenthesesAnswer.kt</url>
+          <line>26</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

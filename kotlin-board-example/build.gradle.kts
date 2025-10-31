@@ -35,6 +35,8 @@ dependencies {
 
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("io.mockk:mockk:1.13.8")  // Kotlin 전용 Mocking 라이브러리
+    testImplementation("com.ninja-squad:springmockk:4.0.2")  // Spring + MockK 통합
 }
 
 tasks.withType<KotlinCompile> {
