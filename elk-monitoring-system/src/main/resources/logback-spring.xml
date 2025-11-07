@@ -7,7 +7,7 @@
     <!-- 콘솔 출력 Appender (개발용) -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS, Asia/Seoul} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 
@@ -21,6 +21,8 @@
             <includeMdc>true</includeMdc>
             <includeContext>true</includeContext>
             <includeCallerData>true</includeCallerData>
+            <!-- 한국 시간대 설정 -->
+            <timeZone>Asia/Seoul</timeZone>
         </encoder>
 
         <!-- 롤링 정책 - 날짜별, 크기별 -->
@@ -48,6 +50,9 @@
             <includeMdc>true</includeMdc>
             <includeContext>true</includeContext>
             <includeCallerData>true</includeCallerData>
+
+            <!-- 한국 시간대 설정 -->
+            <timeZone>Asia/Seoul</timeZone>
 
             <!-- 스택 트레이스 해시 추가 (에러 그룹핑용) -->
             <includeStructuredArguments>true</includeStructuredArguments>
@@ -82,6 +87,8 @@
         </filter>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder">
             <customFields>{"app_name":"elk-monitoring-system","log_type":"error"}</customFields>
+            <!-- 한국 시간대 설정 -->
+            <timeZone>Asia/Seoul</timeZone>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>${LOG_PATH}/error.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
