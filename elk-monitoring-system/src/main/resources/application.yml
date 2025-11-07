@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: elk-monitoring-system
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/elk_monitoring?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: root1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+    open-in-view: false
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
+    com.example.elkmonitoring: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
