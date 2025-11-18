@@ -1,0 +1,135 @@
+### OpenFeign 예제 프로젝트 API 테스트
+### 사용 방법: IntelliJ IDEA 또는 VS Code REST Client 확장 사용
+
+### ============================================
+### User Service API (포트 8080)
+### ============================================
+
+### 1. 모든 사용자 조회
+GET http://localhost:8080/api/users
+Accept: application/json
+
+### 2. 특정 사용자 조회 (ID: 1)
+GET http://localhost:8080/api/users/1
+Accept: application/json
+
+### 3. 특정 사용자 조회 (ID: 2)
+GET http://localhost:8080/api/users/2
+Accept: application/json
+
+### 4. 새 사용자 생성
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "id": 4,
+  "name": "최지훈",
+  "email": "choi@example.com",
+  "phone": "010-4567-8901"
+}
+
+### 5. 사용자 정보 수정
+PUT http://localhost:8080/api/users/1
+Content-Type: application/json
+
+{
+  "name": "김철수(수정)",
+  "email": "kim.updated@example.com",
+  "phone": "010-9999-9999"
+}
+
+### 6. 사용자 삭제
+DELETE http://localhost:8080/api/users/4
+
+### ============================================
+### Order Service API (포트 8081)
+### ============================================
+
+### 7. 모든 주문 조회 (사용자 정보 포함)
+GET http://localhost:8081/api/orders
+Accept: application/json
+
+### 8. 특정 주문 조회 (ID: 1) - Feign으로 사용자 정보 조회
+GET http://localhost:8081/api/orders/1
+Accept: application/json
+
+### 9. 특정 주문 조회 (ID: 2)
+GET http://localhost:8081/api/orders/2
+Accept: application/json
+
+### 10. 특정 주문 조회 (ID: 3)
+GET http://localhost:8081/api/orders/3
+Accept: application/json
+
+### 11. 특정 사용자의 모든 주문 조회 (User ID: 1)
+GET http://localhost:8081/api/orders/user/1
+Accept: application/json
+
+### 12. 특정 사용자의 모든 주문 조회 (User ID: 2)
+GET http://localhost:8081/api/orders/user/2
+Accept: application/json
+
+### 13. 새 주문 생성 (Feign으로 사용자 검증)
+POST http://localhost:8081/api/orders
+Content-Type: application/json
+
+{
+  "id": 4,
+  "userId": 2,
+  "productName": "모니터",
+  "quantity": 1,
+  "price": 350000.0
+}
+
+### 14. 새 주문 생성 (User ID: 3)
+POST http://localhost:8081/api/orders
+Content-Type: application/json
+
+{
+  "id": 5,
+  "userId": 3,
+  "productName": "헤드셋",
+  "quantity": 2,
+  "price": 80000.0
+}
+
+### ============================================
+### 에러 테스트
+### ============================================
+
+### 15. 존재하지 않는 사용자 조회 (404 에러)
+GET http://localhost:8080/api/users/999
+Accept: application/json
+
+### 16. 존재하지 않는 주문 조회 (500 에러)
+GET http://localhost:8081/api/orders/999
+Accept: application/json
+
+### 17. 존재하지 않는 사용자로 주문 생성 (Feign 에러)
+POST http://localhost:8081/api/orders
+Content-Type: application/json
+
+{
+  "id": 6,
+  "userId": 999,
+  "productName": "테스트 상품",
+  "quantity": 1,
+  "price": 10000.0
+}
+
+### ============================================
+### Stub 모드 전용 테스트 (Order Service only)
+### 실행: --spring.profiles.active=order-service,stub
+### ============================================
+
+### 18. Stub 모드로 주문 조회 (User Service 없이 실행)
+GET http://localhost:8081/api/orders/1
+Accept: application/json
+
+### 19. Stub 모드로 모든 주문 조회
+GET http://localhost:8081/api/orders
+Accept: application/json
+
+### 20. Stub 모드로 사용자별 주문 조회
+GET http://localhost:8081/api/orders/user/1
+Accept: application/json

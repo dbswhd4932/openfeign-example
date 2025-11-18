@@ -1,20 +1,17 @@
 package com.example.openfeign.order;
 
 import com.example.openfeign.common.User;
-import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 /**
- * OpenFeign 클라이언트 예제
- * User Service를 호출하기 위한 Feign Client 인터페이스
+ * User Service 클라이언트 인터페이스
+ *
+ * 구현체:
+ * - RestUserClient: OpenFeign을 사용한 실제 HTTP 호출 (@Profile("rest"))
+ * - StubUserClient: 메모리 기반 테스트용 구현체 (@Profile("stub"))
  */
-@FeignClient(
-    name = "user-service",
-    url = "${user.service.url}",
-    configuration = FeignConfig.class
-)
 public interface UserClient {
 
     /**

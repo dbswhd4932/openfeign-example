@@ -12,7 +12,9 @@ Spring Cloud OpenFeign을 사용한 마이크로서비스 간 통신 학습 프�
 
 2. **Order Service** (포트 8081)
    - 주문 정보를 관리하는 API 서버
-   - OpenFeign을 사용하여 User Service와 통신
+   - User Service와 통신하기 위한 두 가지 클라이언트 구현
+     - **RestUserClient**: OpenFeign을 사용한 실제 HTTP 호출 (프로덕션)
+     - **StubUserClient**: 메모리 기반 테스트용 구현 (개발/테스트)
    - 주문 조회 시 자동으로 사용자 정보를 가져옴
 
 ## 기술 스택
@@ -50,15 +52,68 @@ public interface UserClient {
 
 ## 실행 방법
 
-### 1. User Service 실행
+### 방법 1: User Service 단독 실행
+
 ```bash
-./gradlew bootRun --args='--spring.profiles.active=user-service'
+./gradlew bootRun -PmainClass=com.example.openfeign.UserServiceApplication --args='--spring.profiles.active=user-service'
 ```
 
-### 2. Order Service 실행 (새 터미널에서)
+### 방법 2: Order Service + REST 클라이언트 (실제 HTTP 호출)
+
+실제 프로덕션 환경과 동일하게 HTTP를 통해 User Service를 호출합니다.
+
 ```bash
-./gradlew bootRun --args='--spring.profiles.active=order-service'
+# 터미널 1: User Service 실행
+./gradlew bootRun -PmainClass=com.example.openfeign.UserServiceApplication --args='--spring.profiles.active=user-service'
+
+# 터미널 2: Order Service (REST 모드)
+./gradlew bootRun -PmainClass=com.example.openfeign.OrderServiceApplication --args='--spring.profiles.active=order-service,rest'
 ```
+
+**REST 모드 특징:**
+- `RestUserClient` 사용 (OpenFeign 기반 HTTP 호출)
+- User Service가 반드시 실행 중이어야 함
+- 실제 네트워크 호출 발생
+- Feign의 타임아웃, 재시도, 로깅 등 모든 기능 확인 가능
+
+### 방법 3: Order Service + Stub 클라이언트 (독립 실행) ⭐ 개발/테스트 추천
+
+User Service 없이도 Order Service를 독립적으로 실행하고 테스트할 수 있습니다.
+
+```bash
+./gradlew bootRun -PmainClass=com.example.openfeign.OrderServiceApplication --args='--spring.profiles.active=order-service,stub'
+```
+
+**Stub 모드 특징:**
+- `StubUserClient` 사용 (메모리 기반)
+- User Service 실행 불필요
+- 네트워크 호출 없어서 빠른 테스트
+- 외부 의존성 제거로 안정적인 개발 환경
+- 🔧 접두사가 붙은 로그로 Stub 호출 확인
+
+**실행 예시:**
+```bash
+# Stub 모드로 실행
+./gradlew bootRun -PmainClass=com.example.openfeign.OrderServiceApplication --args='--spring.profiles.active=order-service,stub'
+
+# 로그에서 확인:
+# 🔧 [STUB MODE] StubUserClient initialized with 3 users
+
+# API 호출
+curl http://localhost:8081/api/orders/1
+
+# 로그에 표시:
+# 🔧 [STUB] getUserById called with id: 1
+```
+
+## 클라이언트 선택 가이드
+
+| 상황 | 프로필 조합 | 사용 클라이언트 | User Service 필요 |
+|------|------------|----------------|------------------|
+| **프로덕션** | `order-service,rest` | RestUserClient | ✅ 필수 |
+| **통합 테스트** | `order-service,rest` | RestUserClient | ✅ 필수 |
+| **개발/단위 테스트** | `order-service,stub` | StubUserClient | ❌ 불필요 |
+| **로컬 개발** | `order-service,stub` | StubUserClient | ❌ 불필요 |
 
 ## API 테스트
 
@@ -128,7 +183,26 @@ curl -X POST http://localhost:8081/api/orders \
 ### 3. Feign 사용
 `OrderService.java` 파일에서 Feign Client를 주입받아 사용하는 방법을 확인하세요.
 
-### 4. 로깅 확인
+### 4. Stub 구현으로 인터페이스 기반 개발 학습 ⭐ 신규
+`StubUserClient.java` 파일에서 인터페이스 기반 개발의 장점을 학습하세요:
+- 같은 인터페이스(`UserClient`)를 구현하는 두 가지 방법
+  - **실제 구현**: Feign이 자동 생성 (HTTP 호출)
+  - **Stub 구현**: 메모리 기반 데이터 (HTTP 호출 없음)
+- `@Profile` 어노테이션으로 런타임에 구현체 교체
+- 의존성 역전 원칙(DIP) 적용 사례
+- 테스트 용이성 향상
+
+**비교:**
+```java
+// OrderService는 인터페이스에만 의존
+private final UserClient userClient;
+
+// 실행 시점에 결정:
+// - order-service 프로필: Feign 구현체 (실제 HTTP)
+// - order-service,stub 프로필: StubUserClient (메모리)
+```
+
+### 5. 로깅 확인
 Order Service를 실행하고 API를 호출하면 콘솔에서 Feign의 상세한 로그를 확인할 수 있습니다:
 - 요청 URL
 - 요청 헤더
@@ -137,6 +211,10 @@ Order Service를 실행하고 API를 호출하면 콘솔에서 Feign의 상세�
 - 응답 헤더
 - 응답 바디
 - 실행 시간
+
+**Stub 모드에서는:**
+- 🔧 접두사가 붙은 로그로 Stub 호출 확인 가능
+- 실제 HTTP 호출 로그는 없음
 
 ## 에러 처리 테스트
 

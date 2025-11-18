@@ -15,7 +15,7 @@ logging:
   level:
     com.example.openfeign: DEBUG
 
-# Order Service 프로필
+# Order Service 기본 설정
 ---
 spring:
   config:
@@ -23,6 +23,17 @@ spring:
       on-profile: order-service
 server:
   port: 8081
+
+logging:
+  level:
+    com.example.openfeign: DEBUG
+
+# REST 클라이언트 프로필 - 실제 HTTP 호출
+---
+spring:
+  config:
+    activate:
+      on-profile: rest
 
 # User Service URL 설정
 user:
@@ -32,8 +43,7 @@ user:
 # Feign 로깅 설정
 logging:
   level:
-    com.example.openfeign: DEBUG
-    com.example.openfeign.order.UserClient: DEBUG
+    com.example.openfeign.order.RestUserClient: DEBUG
 
 # Feign 설정
 feign:
@@ -43,3 +53,14 @@ feign:
         connectTimeout: 5000
         readTimeout: 10000
         loggerLevel: full
+
+# Stub 클라이언트 프로필 - 테스트용 (User Service 없이 테스트)
+---
+spring:
+  config:
+    activate:
+      on-profile: stub
+
+logging:
+  level:
+    com.example.openfeign.order.StubUserClient: DEBUG

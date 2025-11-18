@@ -1,16 +1,15 @@
 package com.example.openfeign.order;
 
 import com.example.openfeign.common.User;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import jakarta.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class OrderService {
 
     private final UserClient userClient;
@@ -18,7 +17,10 @@ public class OrderService {
 
     public OrderService(UserClient userClient) {
         this.userClient = userClient;
+    }
 
+    @PostConstruct
+    public void init() {
         // 초기 주문 데이터
         orderDatabase.put(1L, new Order(1L, 1L, "노트북", 1, 1500000.0, null));
         orderDatabase.put(2L, new Order(2L, 2L, "마우스", 2, 30000.0, null));

@@ -33,7 +33,8 @@ public class FeignConfig {
     public Request.Options requestOptions() {
         return new Request.Options(
             5000, TimeUnit.MILLISECONDS,  // 연결 타임아웃
-            10000, TimeUnit.MILLISECONDS  // 읽기 타임아웃
+            10000, TimeUnit.MILLISECONDS, // 읽기 타임아웃
+            true                          // 리다이렉트 따라가기
         );
     }
 
