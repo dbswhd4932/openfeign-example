@@ -1,4 +1,4 @@
-package com.example.openfeign.order;
+package com.example.openfeign.order.client;
 
 import com.example.openfeign.common.User;
 import org.springframework.context.annotation.Primary;

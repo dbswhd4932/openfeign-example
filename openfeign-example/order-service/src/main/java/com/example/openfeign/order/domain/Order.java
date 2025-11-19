@@ -1,4 +1,4 @@
-package com.example.openfeign.order;
+package com.example.openfeign.order.domain;
 
 import com.example.openfeign.common.User;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package com.example.openfeign.user;
+package com.example.openfeign.user.controller;
 
 import com.example.openfeign.common.User;
 import org.springframework.web.bind.annotation.*;

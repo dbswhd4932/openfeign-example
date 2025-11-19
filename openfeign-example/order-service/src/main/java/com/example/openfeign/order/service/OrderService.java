@@ -1,5 +1,8 @@
-package com.example.openfeign.order;
+package com.example.openfeign.order.service;
 
+import com.example.openfeign.common.User;
+import com.example.openfeign.order.client.UserClient;
+import com.example.openfeign.order.domain.Order;
 import com.example.openfeign.common.User;
 import org.springframework.stereotype.Service;
 

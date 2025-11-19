@@ -1,5 +1,7 @@
-package com.example.openfeign.order;
+package com.example.openfeign.order.controller;
 
+import com.example.openfeign.order.domain.Order;
+import com.example.openfeign.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

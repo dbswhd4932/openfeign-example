@@ -1,6 +1,7 @@
-package com.example.openfeign.order;
+package com.example.openfeign.order.client;
 
 import com.example.openfeign.common.User;
+import com.example.openfeign.order.config.FeignConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.*;

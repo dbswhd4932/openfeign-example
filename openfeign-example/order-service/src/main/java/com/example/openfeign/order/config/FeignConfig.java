@@ -1,4 +1,4 @@
-package com.example.openfeign.order;
+package com.example.openfeign.order.config;
 
 import feign.Logger;
 import feign.Request;
@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
  * Feign 클라이언트 설정
  */
 @Configuration
-@EnableFeignClients(basePackages = "com.example.openfeign.order")
+@EnableFeignClients(basePackages = "com.example.openfeign.order.client")
 public class FeignConfig {
 
     /**
