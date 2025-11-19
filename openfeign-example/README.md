@@ -4,14 +4,22 @@ Spring Cloud OpenFeign을 사용한 마이크로서비스 간 통신 학습 프�
 
 ## 프로젝트 구조
 
-이 프로젝트는 두 개의 서비스로 구성되어 있습니다:
+이 프로젝트는 **멀티 모듈 구조**로 구성된 프로덕션 레디 아키텍처입니다:
 
-1. **User Service** (포트 8080)
-   - 사용자 정보를 제공하는 API 서버
+### 모듈 구성
+
+1. **common**
+   - 공통 DTO 및 유틸리티 클래스
+   - User DTO 정의
+
+2. **user-service** (포트 8080)
+   - 사용자 정보를 제공하는 독립 서비스
    - REST API를 통해 사용자 CRUD 작업 제공
+   - common 모듈 의존
 
-2. **Order Service** (포트 8081)
-   - 주문 정보를 관리하는 API 서버
+3. **order-service** (포트 8081)
+   - 주문 정보를 관리하는 독립 서비스
+   - common 모듈 의존
    - User Service와 통신하기 위한 두 가지 클라이언트 구현
      - **RestUserClient**: OpenFeign을 사용한 실제 HTTP 호출 (프로덕션)
      - **StubUserClient**: 메모리 기반 테스트용 구현 (개발/테스트)
@@ -55,7 +63,7 @@ public interface UserClient {
 ### 방법 1: User Service 단독 실행
 
 ```bash
-./gradlew bootRun -PmainClass=com.example.openfeign.UserServiceApplication --args='--spring.profiles.active=user-service'
+./gradlew :user-service:bootRun
 ```
 
 ### 방법 2: Order Service + REST 클라이언트 (실제 HTTP 호출)
@@ -64,10 +72,10 @@ public interface UserClient {
 
 ```bash
 # 터미널 1: User Service 실행
-./gradlew bootRun -PmainClass=com.example.openfeign.UserServiceApplication --args='--spring.profiles.active=user-service'
+./gradlew :user-service:bootRun
 
 # 터미널 2: Order Service (REST 모드)
-./gradlew bootRun -PmainClass=com.example.openfeign.OrderServiceApplication --args='--spring.profiles.active=order-service,rest'
+./gradlew :order-service:bootRun --args='--spring.profiles.active=rest'
 ```
 
 **REST 모드 특징:**
@@ -81,7 +89,7 @@ public interface UserClient {
 User Service 없이도 Order Service를 독립적으로 실행하고 테스트할 수 있습니다.
 
 ```bash
-./gradlew bootRun -PmainClass=com.example.openfeign.OrderServiceApplication --args='--spring.profiles.active=order-service,stub'
+./gradlew :order-service:bootRun --args='--spring.profiles.active=stub'
 ```
 
 **Stub 모드 특징:**
@@ -94,7 +102,7 @@ User Service 없이도 Order Service를 독립적으로 실행하고 테스트�
 **실행 예시:**
 ```bash
 # Stub 모드로 실행
-./gradlew bootRun -PmainClass=com.example.openfeign.OrderServiceApplication --args='--spring.profiles.active=order-service,stub'
+./gradlew :order-service:bootRun --args='--spring.profiles.active=stub'
 
 # 로그에서 확인:
 # 🔧 [STUB MODE] StubUserClient initialized with 3 users
@@ -108,12 +116,12 @@ curl http://localhost:8081/api/orders/1
 
 ## 클라이언트 선택 가이드
 
-| 상황 | 프로필 조합 | 사용 클라이언트 | User Service 필요 |
-|------|------------|----------------|------------------|
-| **프로덕션** | `order-service,rest` | RestUserClient | ✅ 필수 |
-| **통합 테스트** | `order-service,rest` | RestUserClient | ✅ 필수 |
-| **개발/단위 테스트** | `order-service,stub` | StubUserClient | ❌ 불필요 |
-| **로컬 개발** | `order-service,stub` | StubUserClient | ❌ 불필요 |
+| 상황 | 실행 명령 | 사용 클라이언트 | User Service 필요 |
+|------|----------|----------------|------------------|
+| **프로덕션** | `./gradlew :order-service:bootRun --args='--spring.profiles.active=rest'` | RestUserClient | ✅ 필수 |
+| **통합 테스트** | `./gradlew :order-service:bootRun --args='--spring.profiles.active=rest'` | RestUserClient | ✅ 필수 |
+| **개발/단위 테스트** | `./gradlew :order-service:bootRun --args='--spring.profiles.active=stub'` | StubUserClient | ❌ 불필요 |
+| **로컬 개발** | `./gradlew :order-service:bootRun --args='--spring.profiles.active=stub'` | StubUserClient | ❌ 불필요 |
 
 ## API 테스트
 
@@ -254,31 +262,45 @@ Eureka 또는 Consul과 통합하여 동적 서비스 디스커버리를 구현�
 - [Spring Cloud OpenFeign 공식 문서](https://docs.spring.io/spring-cloud-openfeign/docs/current/reference/html/)
 - [Feign GitHub](https://github.com/OpenFeign/feign)
 
-## 프로젝트 구조
+## 디렉토리 구조
+
 ```
-openfeign-example/
-├── build.gradle
-├── settings.gradle
-├── README.md
-└── src/
-    └── main/
-        ├── java/
-        │   └── com/
-        │       └── example/
-        │           └── openfeign/
-        │               ├── UserServiceApplication.java      # User Service 메인
-        │               ├── OrderServiceApplication.java     # Order Service 메인
-        │               ├── common/
-        │               │   └── User.java                    # 공통 DTO
-        │               ├── user/
-        │               │   └── UserController.java          # User API
-        │               └── order/
-        │                   ├── Order.java                   # Order DTO
-        │                   ├── UserClient.java              # Feign Client 인터페이스
-        │                   ├── FeignConfig.java             # Feign 설정
-        │                   ├── OrderService.java            # Order 비즈니스 로직
-        │                   └── OrderController.java         # Order API
-        └── resources/
-            ├── application.yml                              # 설정 파일
-            └── logback-spring.xml                           # 로깅 설정
+openfeign-example/                              # 루트 프로젝트
+├── build.gradle                                 # 루트 빌드 설정
+├── settings.gradle                              # 멀티 모듈 설정
+├── README.md                                    # 프로젝트 문서
+├── api-tests.http                               # HTTP 테스트 파일
+│
+├── common/                                      # 공통 모듈
+│   ├── build.gradle
+│   └── src/main/java/com/example/openfeign/common/
+│       └── User.java                            # 공통 User DTO
+│
+├── user-service/                                # User Service 모듈
+│   ├── build.gradle
+│   └── src/
+│       ├── main/
+│       │   ├── java/com/example/openfeign/
+│       │   │   ├── UserServiceApplication.java  # User Service 메인
+│       │   │   └── user/
+│       │   │       └── UserController.java      # User API
+│       │   └── resources/
+│       │       └── application.yml              # User Service 설정
+│
+└── order-service/                               # Order Service 모듈
+    ├── build.gradle
+    └── src/
+        ├── main/
+        │   ├── java/com/example/openfeign/
+        │   │   ├── OrderServiceApplication.java # Order Service 메인
+        │   │   └── order/
+        │   │       ├── Order.java               # Order DTO
+        │   │       ├── UserClient.java          # Feign Client 인터페이스
+        │   │       ├── RestUserClient.java      # Feign 기반 HTTP 구현체
+        │   │       ├── StubUserClient.java      # 메모리 기반 Stub 구현체
+        │   │       ├── FeignConfig.java         # Feign 설정
+        │   │       ├── OrderService.java        # Order 비즈니스 로직
+        │   │       └── OrderController.java     # Order API
+        │   └── resources/
+        │       └── application.yml              # Order Service 설정 (REST/Stub 프로필)
 ```

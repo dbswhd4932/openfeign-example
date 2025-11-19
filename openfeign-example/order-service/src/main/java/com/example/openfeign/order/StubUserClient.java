@@ -24,9 +24,9 @@ public class StubUserClient implements UserClient {
 
     public StubUserClient() {
         // Stub 데이터 초기화
-        userDatabase.put(1L, new User(1L, "김철수", "kim@example.com", "010-1234-5678"));
-        userDatabase.put(2L, new User(2L, "이영희", "lee@example.com", "010-2345-6789"));
-        userDatabase.put(3L, new User(3L, "박민수", "park@example.com", "010-3456-7890"));
+        userDatabase.put(1L, new User(1L, "김철수Stub", "kimStub@example.com", "010-1234-5678"));
+        userDatabase.put(2L, new User(2L, "이영희Stub", "leeStub@example.com", "010-2345-6789"));
+        userDatabase.put(3L, new User(3L, "박민수Stub", "parkStub@example.com", "010-3456-7890"));
 
         System.out.println("🔧 [STUB MODE] StubUserClient initialized with " + userDatabase.size() + " users");
     }

@@ -1,49 +1,20 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.2.0'
-    id 'io.spring.dependency-management' version '1.1.4'
+    id 'org.springframework.boot' version '3.2.0' apply false
+    id 'io.spring.dependency-management' version '1.1.4' apply false
 }
 
-group = 'com.example'
-version = '0.0.1-SNAPSHOT'
+group = 'com.example.openfeign'
+version = '1.0-SNAPSHOT'
 
-java {
-    sourceCompatibility = '17'
-}
+subprojects {
+    apply plugin: 'java'
 
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
+    repositories {
+        mavenCentral()
     }
-}
 
-repositories {
-    mavenCentral()
-}
-
-ext {
-    set('springCloudVersion', "2023.0.0")
-}
-
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-}
-
-dependencyManagement {
-    imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    java {
+        sourceCompatibility = '17'
     }
-}
-
-tasks.named('test') {
-    useJUnitPlatform()
-}
-
-// 스프링 부트 메인 클래스 설정
-springBoot {
-    mainClass = project.hasProperty('mainClass') ? project.property('mainClass') : 'com.example.openfeign.UserServiceApplication'
 }

@@ -3,6 +3,7 @@ package com.example.openfeign.order;
 import feign.Logger;
 import feign.Request;
 import feign.Retryer;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,6 +13,7 @@ import java.util.concurrent.TimeUnit;
  * Feign 클라이언트 설정
  */
 @Configuration
+@EnableFeignClients(basePackages = "com.example.openfeign.order")
 public class FeignConfig {
 
     /**

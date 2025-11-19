@@ -1,26 +1,9 @@
 spring:
   application:
-    name: openfeign-example
+    name: order-service
+  profiles:
+    active: rest # 기본 프로필을 stub으로 설정 (개발 편의성)
 
-# User Service 프로필
----
-spring:
-  config:
-    activate:
-      on-profile: user-service
-server:
-  port: 8080
-
-logging:
-  level:
-    com.example.openfeign: DEBUG
-
-# Order Service 기본 설정
----
-spring:
-  config:
-    activate:
-      on-profile: order-service
 server:
   port: 8081
 
@@ -28,7 +11,7 @@ logging:
   level:
     com.example.openfeign: DEBUG
 
-# REST 클라이언트 프로필 - 실제 HTTP 호출
+# REST 프로필 - 실제 HTTP 호출
 ---
 spring:
   config:
@@ -54,7 +37,7 @@ feign:
         readTimeout: 10000
         loggerLevel: full
 
-# Stub 클라이언트 프로필 - 테스트용 (User Service 없이 테스트)
+# Stub 프로필 - 테스트용 (User Service 없이 테스트)
 ---
 spring:
   config:
